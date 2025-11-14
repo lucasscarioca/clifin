@@ -1,10 +1,20 @@
 [project]
-name = "01-fin-manager"
+name = "clifin"
 version = "0.1.0"
-description = "Add your description here"
+description = "Personal Finance Manager CLI"
 readme = "README.md"
+authors = [
+    { name = "Lucas Carioca", email = "lucascarioca97@gmail.com" }
+]
 requires-python = ">=3.13"
 dependencies = [
     "alembic>=1.17.1",
     "typer>=0.20.0",
 ]
+
+[project.scripts]
+clifin = "clifin:main"
+
+[build-system]
+requires = ["uv_build>=0.8.15,<0.9.0"]
+build-backend = "uv_build"

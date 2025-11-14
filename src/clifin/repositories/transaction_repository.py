@@ -1,5 +1,5 @@
-from src.db.database import get_connection
-from src.models.transaction import Transaction, TransactionUpdate
+from ..db.database import get_connection
+from ..models.transaction import Transaction, TransactionUpdate
 
 
 class TransactionRepository:

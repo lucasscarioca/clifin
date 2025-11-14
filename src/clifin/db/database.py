@@ -1,11 +1,11 @@
 import sqlite3
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from collections.abc import Generator
 
 # Database configuration
 DB_NAME = "clifin.db"
-DB_PATH = Path(__file__).parent.parent.parent / DB_NAME
+DB_PATH = Path(__file__).parent.parent.parent.parent / DB_NAME
 
 
 @contextmanager
