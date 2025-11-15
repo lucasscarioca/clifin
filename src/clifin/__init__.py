@@ -1,5 +1,7 @@
 import subprocess
+import sys
 from datetime import datetime
+from pathlib import Path
 
 import typer
 from typing_extensions import Annotated
@@ -228,6 +230,27 @@ def list():
         typer.echo(
             f"{t.id:<5} {t.date:<12} {t.title[:20]:<20} {t.category[:15]:<15} {amount_str:<10}"
         )
+
+
+@app.command()
+def dashboard():
+    """Launch the Streamlit financial dashboard."""
+    try:
+        # Get the path to dashboard.py
+        dashboard_path = Path(__file__).parent / "dashboard.py"
+
+        # Run streamlit
+        cmd = [sys.executable, "-m", "streamlit", "run", str(dashboard_path)]
+        typer.echo("🚀 Starting Streamlit dashboard...")
+        typer.echo("Open your browser to view the dashboard")
+        typer.echo("Press Ctrl+C to stop the server")
+
+        subprocess.run(cmd)
+    except KeyboardInterrupt:
+        typer.echo("\n✓ Dashboard stopped")
+    except Exception as e:
+        typer.echo(f"Error starting dashboard: {e}")
+        raise typer.Abort()
 
 
 def main() -> None:

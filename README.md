@@ -27,14 +27,15 @@ Diagrama simplificado:
 - **Usuário** → Interage com comandos CLI (adicionar, listar, etc.)
 - **Aplicação CLI (Clifin)** → Processa comandos, valida dados, acessa banco de dados
 - **Banco de Dados SQLite** → Armazena transações (receitas/despesas) e metadados
+- **Dashboard Streamlit** → Exibição dos dados registrados na aplicação
 
-Futuramente, será integrado com Streamlit para dashboards web e um agente de IA para consultas conversacionais.
+Futuramente, será integrado com um agente de IA para consultas conversacionais.
 
 ```mermaid
 graph TD
     A[Usuário] --> B[Aplicação CLI - Clifin]
     B --> C[Banco de Dados SQLite]
-    B --> D[Streamlit Dashboard - Futuro]
+    B --> D[Streamlit Dashboard]
     B --> E[Agente IA - Futuro]
 ```
 
@@ -45,9 +46,9 @@ graph TD
 - **Listar Transações**: Exibe todas as transações armazenadas, com filtros opcionais. Usa o modelo `Transaction` e repositório para consulta.
 - **Inicializar Banco de Dados**: Comando para criar e migrar o banco de dados SQLite. Utiliza Alembic para migrações.
 - **Análise Exploratória de Dados (EDA)**: Notebook para gerar estatísticas descritivas, gráficos e insights sobre os dados financeiros registrados.
+- **Dashboard Web com Streamlit**: Comando para iniciar um servidor web local exibindo dashboard com visualizações dos dados financeiros.
 
 ### Funcionalidades Planejadas:
-- **Dashboard Web com Streamlit**: Comando para iniciar um servidor web local exibindo dashboards interativos com visualizações dos dados financeiros.
 - **Chat com Agente de IA**: Comando para interagir com um assistente virtual que responde perguntas sobre as finanças pessoais, utilizando contexto dos dados armazenados.
 
 ## Estrutura de Dados
@@ -86,6 +87,7 @@ Exemplo de uso:
 - Adicionar receita: `uv run clifin add "Salário" 3000 "Freelancer" --date 2025-11-01`
 - Listar transações: `uv run clifin list`
 - Resumo de transações: `uv run clifin summary`
+- Abrir dashboard: `uv run clifin dashboard`
 
 ### Instalação global
 
@@ -102,6 +104,7 @@ A partir da raiz deste repositório, execute: `uv tool install . -e`
 - Atualizar registro: `clifin update {id} {...}`
 - Exibir resumo financeiro: `clifin summary`
 - Exibir lista de transações: `clifin list`
+- Abrir dashboard Streamlit: `clifin dashboard`
 
 ## Análises realizadas
 
@@ -124,8 +127,11 @@ As análises foram realizadas com base em transações fictícias geradas a part
   - `models/`: Definições de modelos de dados (ex: Transaction)
   - `repositories/`: Camada de acesso a dados
   - `__init__.py`: Inicialização do pacote. Ponto de entrada da aplicação CLI
+  - `dashboard.py`: Script para hospedar dashboard Streamlit em `localhost:8501` através do comando `clifin dashboard`
 - `migrations/`: Scripts de migração do banco com Alembic
 - `pyproject.toml`: Configuração do projeto e dependências
+- `clifin_eda.ipynb`: Jupyter Notebook com implementação da análise exploratória dos dados da aplicação
+- `seed_db.py`: Script para popular banco de dados com dados fictícios
 
 ## Capturas de Tela / Exemplos de saída
 
@@ -156,6 +162,7 @@ Testes ainda não implementados. Planejamos adicionar:
 - UV para gerenciamento do projeto Python: https://docs.astral.sh/uv/
 - Typer para CLI: https://typer.tiangolo.com/
 - Alembic para migrações: https://alembic.sqlalchemy.org/
+- Streamlit para dashboard web: https://docs.streamlit.io/
 
 ## Contribuições dos Integrantes
 
@@ -163,7 +170,6 @@ Testes ainda não implementados. Planejamos adicionar:
 
 ## Próximos Passos / Melhorias Futuras
 
-- Adicionar dashboard web usando Streamlit para visualizações interativas
 - Integrar agente de IA para consultas conversacionais sobre finanças
 - Adicionar suíte de testes completa, incluindo scripts para popular dados de teste
 - Melhorias técnicas: Suporte a múltiplas moedas, registro de compras parceladas (valor divididos em N meses), exportação para CSV
