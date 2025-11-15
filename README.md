@@ -9,7 +9,7 @@ Projeto para a disciplina de Programação para Ciência de Dados do MBA Ciênci
 | **Instrutor** | Cássio Pinheiro |
 | **Integrantes** | Lucas Sales Carvalho Carioca (2528138) |
 | **Repositório GitHub** | https://github.com/lucasscarioca/clifin |
-| **Data de Entrega** | 14/11/2024 |
+| **Data de Entrega** | 14/11/2025 |
 
 ## Objetivo do Projeto
 
@@ -44,9 +44,9 @@ graph TD
 - **Adicionar Transação**: Permite registrar novas receitas ou despesas com data, descrição e valor. Utiliza o módulo `transaction_repository` para persistência.
 - **Listar Transações**: Exibe todas as transações armazenadas, com filtros opcionais. Usa o modelo `Transaction` e repositório para consulta.
 - **Inicializar Banco de Dados**: Comando para criar e migrar o banco de dados SQLite. Utiliza Alembic para migrações.
+- **Análise Exploratória de Dados (EDA)**: Notebook para gerar estatísticas descritivas, gráficos e insights sobre os dados financeiros registrados.
 
 ### Funcionalidades Planejadas:
-- **Análise Exploratória de Dados (EDA)**: Comando para gerar estatísticas descritivas, gráficos e insights sobre os dados financeiros. Utilizará bibliotecas como Pandas e Matplotlib.
 - **Dashboard Web com Streamlit**: Comando para iniciar um servidor web local exibindo dashboards interativos com visualizações dos dados financeiros.
 - **Chat com Agente de IA**: Comando para interagir com um assistente virtual que responde perguntas sobre as finanças pessoais, utilizando contexto dos dados armazenados.
 
@@ -54,12 +54,14 @@ graph TD
 
 O principal modelo de dados é a `Transaction`, representada por uma dataclass com os campos:
 - `id`: Identificador único (inteiro)
-- `date`: Data da transação (string no formato YYYY-MM-DD)
-- `description`: Descrição da transação (string)
+- `title`: Nome da transação (string)
 - `amount`: Valor da transação (float, positivo para receitas, negativo para despesas)
-- `type`: Tipo ('income' ou 'expense')
+- `category`: Categproa da transação (string)
+- `date`: Data da transação (string no formato YYYY-MM-DD)
+- `description`: Descrição da transação (string opcional)
+- `created_at`: Data de criação da transação (string no formato YYYY-MM-DD)
 
-Exemplo de entrada: Comando `add --date 2024-11-01 --description "Salário" --amount 3000.00 --type income`
+Exemplo de entrada: Comando `uv run clifin add "Salário" 3000 "Freelancer" --date 2025-11-01`
 
 Exemplo de saída: Lista de transações exibida em formato tabular no terminal.
 
@@ -77,12 +79,29 @@ Para instalar as dependências: Execute `uv sync` no diretório do projeto.
 ## Como executar o projeto
 
 1. **Instalação**: Clone o repositório e execute `uv sync` para instalar dependências.
-2. **Inicialização**: Execute `uv run main.py init` para criar e migrar o banco de dados.
-3. **Execução**: Use `uv run main.py` para ver comandos disponíveis, ou diretamente `uv run main.py add` para adicionar transações.
+2. **Inicialização**: Execute `uv run clifin init` para criar e migrar o banco de dados.
+3. **Execução**: Use `uv run clifin --help` para ver comandos disponíveis, ou diretamente `uv run clifin add` para adicionar transações.
 
 Exemplo de uso:
-- Adicionar receita: `uv run main.py add --date 2024-11-01 --description "Salário" --amount 3000.00 --type income`
-- Listar transações: `uv run main.py list`
+- Adicionar receita: `uv run clifin add "Salário" 3000 "Freelancer" --date 2025-11-01`
+- Listar transações: `uv run clifin list`
+- Resumo de transações: `uv run clifin summary`
+
+### Instalação global
+
+A partir da raiz deste repositório, execute: `uv tool install . -e`
+- Utilize flag `-e` em desenvolvimento para garantir que seja uma instação "editável", para que alterações realizadas no código fonte do repositório reflitam automaticamente.
+
+### Comandos disponíveis
+
+- Exibir comandos disponíveis: `clifin --help`
+- Inicializar banco de dados: `clifin init`
+- Adicionar receita: `clifin add {...}`
+- Adicionar despesa: `clifin sub {...}`
+- Remover registro: `clifin delete {id}`
+- Atualizar registro: `clifin update {id} {...}`
+- Exibir resumo financeiro: `clifin summary`
+- Exibir lista de transações: `clifin list`
 
 ## Análises realizadas
 
@@ -95,12 +114,12 @@ Futuramente, serão calculadas métricas como saldo mensal e proporção de desp
 
 ## Estrutura do Projeto
 
-- `src/`: Código fonte principal
+- `src/clifin/`: Código fonte principal
   - `db/`: Configuração do banco de dados e conexões
   - `models/`: Definições de modelos de dados (ex: Transaction)
   - `repositories/`: Camada de acesso a dados
+  - `__init__.py`: Inicialização do pacote. Ponto de entrada da aplicação CLI
 - `migrations/`: Scripts de migração do banco com Alembic
-- `main.py`: Ponto de entrada da aplicação CLI
 - `pyproject.toml`: Configuração do projeto e dependências
 
 ## Capturas de Tela / Exemplos de saída
@@ -108,11 +127,15 @@ Futuramente, serão calculadas métricas como saldo mensal e proporção de desp
 Atualmente, a aplicação roda no terminal sem interface gráfica. Exemplo de saída do comando `list`:
 
 ```
-ID | Date       | Description | Amount  | Type
-1  | 2024-11-01 | Salário     | 3000.00 | income
-2  | 2024-11-02 | Mercado     | -150.00 | expense
+ID    Date         Title                Category        Amount    
+----------------------------------------------------------------------
+200   2025-11-10   Year-end Bonus       Bonus           +$1016.75 
+199   2025-11-08   Bus Ticket           Transportation  $-104.67  
+198   2025-11-07   Year-end Bonus       Bonus           +$1350.64 
+197   2025-11-05   Furniture            Home            $-563.31  
 ```
 
+No repositório pode ser encontrado o notebook `clifin_eda.ipynb` com a implementação da análise exploratório dos dados registrados na aplicação.
 Futuramente, serão incluídas capturas de dashboards Streamlit e exemplos de conversas com IA.
 
 ## Testes Realizados
@@ -131,12 +154,11 @@ Testes ainda não implementados. Planejamos adicionar:
 
 ## Contribuições dos Integrantes
 
-- **Lucas Sales Carvalho Carioca**: Desenvolvimento completo do projeto, incluindo arquitetura, implementação de funcionalidades básicas, configuração de banco de dados e documentação. Responsável por todos os commits no repositório.
+- **Lucas Sales Carvalho Carioca**: Desenvolvimento do projeto, incluindo arquitetura, implementação de funcionalidades básicas, configuração de banco de dados e documentação.
 
 ## Próximos Passos / Melhorias Futuras
 
-- Implementar análise exploratória de dados (EDA) com Pandas e visualizações
 - Adicionar dashboard web usando Streamlit para visualizações interativas
 - Integrar agente de IA para consultas conversacionais sobre finanças
 - Adicionar suíte de testes completa, incluindo scripts para popular dados de teste
-- Melhorias técnicas: Suporte a múltiplas moedas, categorias de transações, exportação para CSV
+- Melhorias técnicas: Suporte a múltiplas moedas, registro de compras parceladas (valor divididos em N meses), exportação para CSV
