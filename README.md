@@ -105,12 +105,17 @@ A partir da raiz deste repositório, execute: `uv tool install . -e`
 
 ## Análises realizadas
 
-Atualmente, o projeto não possui análises implementadas. Planejamos implementar EDA com:
-- Estatísticas descritivas: média, mediana, desvio padrão de receitas/despesas
-- Visualizações: Gráficos de barras para categorias, linhas para evolução temporal
-- Insights: Identificação de padrões de gastos, alertas para orçamentos
+A implementação das análises pode ser encontrada no arquivo `clifin_eda.ipynb`, onde podemos observar estatísticas e visualizações como:
 
-Futuramente, serão calculadas métricas como saldo mensal e proporção de despesas por categoria.
+1. Distribuição das transações
+2. Receitas e despesas por categoria e quanto cada categoria representa do total de transações
+3. Análise comparativa de receitas vs despesas ao decorrer dos meses
+4. Distribuição dos valores de receitas e depesas (Histogramas e Boxplot) e estatísticas descritivas dos valores de receitas e despesas (através da função `describe()`)
+5. Matriz de correlação e detalhamento das maiores correlações com o valor (`amount`)
+6. Média de despesas por mês e como as principais categorias de despesas evoluem ao longo do tempo
+7. Resumo com total de transações por tipo, categorias com mais transações, melhor e pior mês
+
+As análises foram realizadas com base em transações fictícias geradas a partir do script `seed_db.py` para popular a base de dados da aplicação.
 
 ## Estrutura do Projeto
 
